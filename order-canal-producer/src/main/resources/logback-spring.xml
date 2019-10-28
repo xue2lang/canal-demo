@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
+	<property name="log.base" value="/app/canal/logs" />
+	<!-- 日志最大的历史 60天 -->
+	<property name="maxHistory" value="60" />
+	<!-- 是否显示在控制台 -->
+	<property name="showConsole" value="true" />
+	<!-- 日志级别 -->
+	<property name="logLevel" value="INFO" />
+	<!-- 日志异步队列大小 -->
+	<property name="log.queueSize" value="300" />
+	<!-- 丢失日志 -->
+	<property name="log.discardingThreshold" value="0" />
+	<!-- 日志格式 -->
+	<property name="logPattern"
+		value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread]  %-5level %logger{80}[%L] - %msg%n" />
+
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+
+	<!-- 控制台输出 -->
+	<!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder charset="UTF-8"
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${logPattern}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 按照每天生成日志文件 -->
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.base}/order-canal/order-canal.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.base}/order-canal/order-canal-%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>${maxHistory}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${logPattern}</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE_ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>${log.discardingThreshold}</discardingThreshold>
+		<includeCallerData>true</includeCallerData> <!-- Copy caller data to event -->
+		<queueSize>${log.queueSize}</queueSize>
+		<appender-ref ref="FILE" />
+	</appender>
+
+	<!-- 日志输出级别 -->
+	<root level="${logLevel}" >
+		<appender-ref ref="FILE_ASYNC_FILE" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+
+
+	<appender name="msg" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.base}/msg/msg.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base}/msg/msg.%d{yyyy-MM-dd'.log'}
+			</FileNamePattern>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>${logPattern}</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="msg_ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>${log.discardingThreshold}</discardingThreshold>
+		<includeCallerData>true</includeCallerData> <!-- Copy caller data to event -->
+		<queueSize>${log.queueSize}</queueSize>
+		<appender-ref ref="msg" />
+	</appender>
+
+	<logger name="com.jf.common.config.CanalClusterConfig"
+			level="${logLevel}" additivity="${showConsole}">
+	<appender-ref ref="msg_ASYNC_FILE" />
+	</logger>
+
+	<logger name="com.jf.modules.listener.MqMsgListenerConcurrentlyProcessor"
+			level="${logLevel}" additivity="${showConsole}">
+	<appender-ref ref="msg_ASYNC_FILE" />
+	</logger>
+	<logger name="com.jf.modules.service.impl.DealDataService"
+			level="${logLevel}" additivity="${showConsole}">
+	<appender-ref ref="msg_ASYNC_FILE" />
+	</logger>
+
+	<!--myibatis 日志显示 -->
+	<logger name="com.jf.modules.dao"
+			level="${logLevel}" additivity="${showConsole}">
+	<appender-ref ref="msg_ASYNC_FILE" />
+
+	</logger>
+
+</configuration>

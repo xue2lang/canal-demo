@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jf.modules.dao.TLcOrderTempDao">
+
+    <insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO `t_lc_order_temp_2` (
+		`order_no`,
+		`channel_id`,
+		`up_order_no`,
+		`trade_no`,
+		`pay_type`,
+		`product_type`,
+		`product_id`,
+		`member_id`,
+		`mobile`,
+		`member_name`,
+		`card_type`,
+		`card_no`,
+		`account_mobile`,
+		`is_horse`,
+		`is_fundFlow`,
+		`amount`,
+		`pay_amount`,
+		`zp_amount`,
+		`discount_amount`,
+		`discount_way`,
+		`discount_handle_way`,
+		`buy_deadline`,
+		`deadline_unit`,
+		`profit`,
+		`extra_earnings`,
+		`extra_rem`,
+		`notextra_earnings`,
+		`notextra_rem`,
+		`order_status`,
+		`create_time`,
+		`arrive_time`,
+		`start_time`,
+		`end_time`,
+		`zp_sync_status`,
+		`order_continue_type`,
+		`invite_code`,
+		`cart_id`,
+		`split_state`,
+		`is_arrival`,
+		`advance_profit`,
+		`surplus_amount`,
+		`account_mobile_status`,
+		`is_continue`,
+		`contract_url`,
+		`remark`,
+		`earned_money`,
+		`upload_status`,
+		`rest_amount`,
+		`real_redeem_amount`,
+		`account_name`,
+		`is_scan`,
+		`match_amount`,
+		`match_state`,
+		`short_period`,
+		`user_id`,
+		`specialOrderNote`,
+		`anti_money_url`,
+		`digital_contract_url`
+		)
+		VALUES
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (
+            #{item.orderNo},
+            #{item.channelId},
+            #{item.upOrderNo},
+            #{item.tradeNo},
+            #{item.payType},
+            #{item.productType},
+            #{item.productId},
+            #{item.memberId},
+            #{item.mobile},
+            #{item.memberName},
+            #{item.cardType},
+            #{item.cardNo},
+            #{item.accountMobile},
+            #{item.isHorse},
+            #{item.isFundFlow},
+            #{item.amount},
+            #{item.payAmount},
+            #{item.zpAmount},
+            #{item.discountAmount},
+            #{item.discountWay},
+            #{item.discountHandleWay},
+            #{item.buyDeadline},
+            #{item.deadlineUnit},
+            #{item.profit},
+            #{item.extraEarnings},
+            #{item.extraRem},
+            #{item.notextraEarnings},
+            #{item.notextraRem},
+            #{item.orderStatus},
+            #{item.createTime},
+            #{item.arriveTime},
+            #{item.startTime},
+            #{item.endTime},
+            #{item.zpSyncStatus},
+            #{item.orderContinueType},
+            #{item.inviteCode},
+            #{item.cartId},
+            #{item.splitState},
+            #{item.isArrival},
+            #{item.advanceProfit},
+            #{item.surplusAmount},
+            #{item.accountMobileStatus},
+            #{item.isContinue},
+            #{item.contractUrl},
+            #{item.remark},
+            #{item.earnedMoney},
+            #{item.uploadStatus},
+            #{item.restAmount},
+            #{item.realRedeemAmount},
+            #{item.accountName},
+            #{item.isScan},
+            #{item.matchAmount},
+            #{item.matchState},
+            #{item.shortPeriod},
+            #{item.userId},
+            #{item.specialOrderNote},
+            #{item.antiMoneyUrl},
+            #{item.digitalContractUrl}
+            )
+        </foreach>
+
+
+    </insert>
+
+    <insert id="insertSql">
+        INSERT INTO `t_lc_order_temp_2`
+        (${cols})
+        values
+        (${vals})
+    </insert>
+
+
+</mapper>
